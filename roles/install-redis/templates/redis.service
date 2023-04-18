@@ -1,0 +1,10 @@
+[Unit]
+Description=redis
+After=network.target
+
+[Service]
+ExecStart=/opt/redis/redis-3.2.9/src/redis-server /opt/redis/redis-3.2.9/redis-3.conf
+ExecStop=/opt/redis/redis-3.2.9/src/redis-cli -h 127.0.0.1 -p {{ redis_port }} -a '{{ lookup('env', 'REDIS_PASSWORD')  }}' shutdown
+
+[Install]
+WantedBy=multi-user.target

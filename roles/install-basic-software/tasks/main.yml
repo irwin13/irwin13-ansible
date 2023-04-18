@@ -1,0 +1,33 @@
+---
+- name: Run apt update
+  become: yes
+  ansible.builtin.apt:
+    update_cache: yes
+- name: Install unzip
+  become: yes
+  ansible.builtin.apt:
+    name: unzip
+- name: Install tar
+  become: yes
+  ansible.builtin.apt:
+    name: tar
+- name: Install wget
+  become: yes
+  ansible.builtin.apt:
+    name: wget
+- name: Install gcc
+  become: yes
+  ansible.builtin.apt:
+    name: gcc
+- name: Install make
+  become: yes
+  ansible.builtin.apt:
+    name: make
+- name: Install libssl-dev
+  become: yes
+  ansible.builtin.apt:
+    name: libssl-dev
+- name: Install tcl-tls
+  become: yes
+  ansible.builtin.apt:
+    name: tcl-tls 

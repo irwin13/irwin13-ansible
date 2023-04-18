@@ -1,0 +1,50 @@
+---
+- name: Create redis directory in opt
+  become: yes
+  file:
+    state: directory
+    path: "/opt/redis/"
+
+- name: Download redis 3
+  become: yes
+  command: "wget -qO /opt/redis/redis-3.2.9.tar.gz https://download.redis.io/releases/redis-3.2.9.tar.gz"
+
+- name: Extract tar file
+  become: yes
+  command: "tar -zxvf /opt/redis/redis-3.2.9.tar.gz -C /opt/redis"
+
+- name: Run make distclean
+  become: yes
+  make:
+    chdir: /opt/redis/redis-3.2.9
+    target: distclean
+
+- name: Run make
+  become: yes
+  make:
+    target: install
+    chdir: /opt/redis/redis-3.2.9
+
+- name: Update redis.conf
+  become: yes
+  template:
+    src: redis.conf
+    dest: "/opt/redis/redis-3.2.9/redis-3.conf"
+
+- name: Create redis service file
+  become: yes
+  template:
+    src: redis.service
+    dest: "/etc/systemd/system/redis.service"
+
+- name: Reload redis systemctl
+  become: yes
+  command: "systemctl daemon-reload"
+
+- name: Enable redis service
+  become: yes
+  command: "systemctl enable redis"
+
+- name: Start redis service
+  become: yes
+  command: "systemctl start redis"
