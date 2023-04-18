@@ -1,0 +1,19 @@
+---
+- name: Ping managed nodes
+  ansible.builtin.ping:
+- name: Print message on managed nodes
+  ansible.builtin.debug:
+    msg: Hello world
+- name: Print from env
+  ansible.builtin.debug:
+    msg: "'{{ lookup('env', 'HOME') }}' is the HOME environment variable."     
+- name: Read home
+  ansible.builtin.command: "echo $HOME"
+  register: task_response
+- name: Create a file on managed nodes
+  copy:
+    dest: "~/test-connection.txt"
+    content: |
+      ansible task_response is : {{ task_response }}
+      your home directory is : {{ task_response.stdout }}
+    
