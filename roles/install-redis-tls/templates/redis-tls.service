@@ -1,0 +1,10 @@
+[Unit]
+Description=redis-tls
+After=network.target
+
+[Service]
+ExecStart={{ redis_base_dir }}/src/redis-server {{ redis_base_dir }}/redis.conf
+ExecStop={{ redis_base_dir }}/src/redis-cli --tls --cert {{ redis_base_dir }}/tests/tls/redis.crt --key {{ redis_base_dir }}/tests/tls/redis.key --cacert {{ redis_base_dir }}/tests/tls/ca.crt -h 127.0.0.1 -p {{ redis_port }} -a '{{ lookup('env', 'REDIS_PASSWORD')  }}' shutdown
+
+[Install]
+WantedBy=multi-user.target

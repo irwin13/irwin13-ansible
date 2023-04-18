@@ -1,0 +1,58 @@
+---
+- name: Create redis directory in opt
+  become: yes
+  file:
+    state: directory
+    path: "/opt/redis/"
+
+- name: Download redis 6
+  become: yes
+  command: "wget -qO /opt/redis/redis-6.2.11.tar.gz https://download.redis.io/releases/redis-6.2.11.tar.gz"
+
+- name: Extract tar file
+  become: yes
+  command: "tar -zxvf /opt/redis/redis-6.2.11.tar.gz -C /opt/redis"
+
+- name: Run make distclean
+  become: yes
+  make:
+    chdir: /opt/redis/redis-6.2.11
+    target: distclean
+
+- name: Run make
+  become: yes
+  make:
+    chdir: /opt/redis/redis-6.2.11
+    target: install
+    params:
+      BUILD_TLS: "yes"
+
+- name: Generate a root CA and a server certificate.
+  become: yes
+  command: "/opt/redis/redis-6.2.11/utils/gen-test-certs.sh"
+  args:
+    chdir: "/opt/redis/redis-6.2.11"
+
+- name: Update redis.conf
+  become: yes
+  template:
+    src: redis-tls.conf
+    dest: "/opt/redis/redis-6.2.11/redis.conf"
+
+- name: Create redis-tls service file
+  become: yes
+  template:
+    src: redis-tls.service
+    dest: "/etc/systemd/system/redis-tls.service"
+
+- name: Reload redis-tls systemctl
+  become: yes
+  command: "systemctl daemon-reload"
+
+- name: Enable redis-tls service
+  become: yes
+  command: "systemctl enable redis-tls"
+
+- name: Start redis-tls service
+  become: yes
+  command: "systemctl start redis-tls"
