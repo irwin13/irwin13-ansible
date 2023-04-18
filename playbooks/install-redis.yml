@@ -1,0 +1,5 @@
+# run command : ansible-playbook -i inventory/redis.yml playbooks/install-redis.yml --extra-vars "target=what"
+- hosts: "{{ target }}"
+  roles:
+    - install-basic-software
+    - install-redis
