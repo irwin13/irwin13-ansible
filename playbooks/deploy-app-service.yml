@@ -1,0 +1,4 @@
+# run command : ansible-playbook -i inventory/app-service.yml playbooks/deploy-app-service.yml --extra-vars "target=local build_number=1"
+- hosts: "{{ target }}"
+  roles:
+    - deploy-service

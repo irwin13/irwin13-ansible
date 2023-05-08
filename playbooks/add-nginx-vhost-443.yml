@@ -1,0 +1,4 @@
+# run command : ansible-playbook -i inventory/nginx.yml playbooks/add-nginx-vhost-443.yml --extra-vars "target=local domain_name=api.localhost.com"
+- hosts: "{{ target }}"
+  roles:
+    - add-nginx-vhost-https

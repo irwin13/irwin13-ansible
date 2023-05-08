@@ -1,0 +1,5 @@
+# run command : ansible-playbook -i inventory/nginx.yml. playbooks/install-nginx-private.yml --extra-vars "target=local"
+- hosts: "{{ target }}"
+  roles:
+    - install-basic-software
+    - install-nginx

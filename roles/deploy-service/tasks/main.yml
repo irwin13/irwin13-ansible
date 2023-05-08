@@ -1,8 +1,8 @@
 ---
 - name: Download from S3 to control node
   amazon.aws.s3_object:
-    access_key: "{{ lookup('env', 'STG_AWS_ACCESS_KEY') }}"
-    secret_key: "{{ lookup('env', 'STG_AWS_SECRET_KEY') }}"
+    access_key: "{{ lookup('env', 'AWS_ACCESS_KEY') }}"
+    secret_key: "{{ lookup('env', 'AWS_SECRET_KEY') }}"
     bucket: "{{ s3_bucket }}"
     object: "{{ service_name }}/{{ service_name }}-{{ build_number }}.zip"
     dest: "~/artifact/{{ service_name }}-{{ build_number }}.zip"

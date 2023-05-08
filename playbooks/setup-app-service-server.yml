@@ -1,0 +1,6 @@
+# run command : ansible-playbook -i inventory/app-service.yml playbooks/setup-go-server.yml --extra-vars "target=local"
+- hosts: "{{ target }}"
+  roles:
+    - install-basic-software
+    - setup-systemd
+    - install-papertrail
