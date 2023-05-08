@@ -1,0 +1,14 @@
+---
+- name: Create service file
+  become: yes
+  template:
+    src: generic.service
+    dest: "/etc/systemd/system/{{ service_name }}.service"
+
+- name: Reload systemctl
+  become: yes
+  command: "systemctl daemon-reload"
+
+- name: Enable service
+  become: yes
+  command: "systemctl enable {{ service_name }}"

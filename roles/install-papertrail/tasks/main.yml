@@ -1,0 +1,27 @@
+---
+- name: Set LocalHostName in rsyslog.conf
+  become: yes
+  ansible.builtin.lineinfile:
+    path: /etc/rsyslog.conf
+    insertbefore: BOF
+    line: "$LocalHostName {{ host_name }}-{{ runtime_env }}"
+
+- name: Create papertrail directory in opt
+  become: yes
+  file:
+    state: directory
+    path: "/opt/papertrail/"
+
+- name: Download papertrail script
+  become: yes
+  command: "wget -qO /opt/papertrail/papertrail-setup.sh --header=\"X-Papertrail-Token: {{ lookup('env', 'PAPERTRAIL_TOKEN') }}\" https://papertrailapp.com/destinations/22332032/setup.sh"
+
+- name: Update mode papertrail script
+  become: yes
+  ansible.builtin.file:
+    path: "/opt/papertrail/papertrail-setup.sh"
+    mode: 'a+x'
+
+- name: Execute papertrail setup script
+  become: yes
+  command: "/opt/papertrail/papertrail-setup.sh -q"

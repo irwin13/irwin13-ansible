@@ -1,0 +1,8 @@
+[Unit]
+Description={{ service_name }}
+
+[Service]
+ExecStart=/opt/{{ service_name }}/{{ service_name }}.sh
+
+[Install]
+WantedBy=multi-user.target

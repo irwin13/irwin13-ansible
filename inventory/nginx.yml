@@ -1,0 +1,33 @@
+all:
+  vars:
+    email_contact: admin@localhost.com
+    nginx_upstream_list:
+      - name: api
+        path: 'api/'
+        server_list:
+          - ip: 127.0.0.1
+            port: 80
+          - ip: 127.0.0.2
+            port: 80
+      - name: fe
+        path: 'fe/'
+        server_list:
+          - ip: 127.0.0.1
+            port: 90
+    subdomain_upstream:
+      name: mysubdomain
+      ip: 127.0.0.1
+      port: 80
+  
+  children:
+    nginx_server:
+      children:
+        nginx_http:
+          hosts:
+            nginx_http_01:
+              ansible_host: 127.0.0.1
+
+        nginx_https:
+          hosts:
+            nginx_https_01:
+              ansible_host: 127.0.0.1  

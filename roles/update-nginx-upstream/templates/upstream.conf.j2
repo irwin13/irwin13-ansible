@@ -1,0 +1,77 @@
+worker_processes auto;
+worker_rlimit_nofile 8192;
+
+include /etc/nginx/modules-enabled/*.conf;
+
+events {
+  worker_connections  1024;
+}
+
+http {
+  ##
+  # Basic Settings
+  ##
+
+  error_log syslog:server=unix:/var/log/nginx.sock;
+  access_log syslog:server=unix:/var/log/nginx.sock;
+
+  server_names_hash_bucket_size 64;
+  # server_name_in_redirect off;
+
+  include /etc/nginx/mime.types;
+  default_type application/octet-stream;
+
+  proxy_buffer_size   256k;
+  proxy_buffers   4 512k;
+  proxy_busy_buffers_size   512k;
+  fastcgi_buffers 16 16k;
+  fastcgi_buffer_size 32k;
+
+  sendfile on;
+  tcp_nopush on;
+  types_hash_max_size 2048;
+  # server_tokens off;
+
+  gzip on;
+
+  underscores_in_headers on;
+  client_max_body_size 100M;
+
+  ##
+  # Virtual Host Configs
+  ##
+
+  include /etc/nginx/conf.d/*.conf;
+  include /etc/nginx/sites-enabled/*;
+
+{% for upstream in nginx_upstream_list %}
+  upstream {{ upstream.name }} {  
+{% for server in upstream.server_list %}  
+    server {{ server.ip }}:{{ server.port }};
+{% endfor %}
+  }
+
+{% endfor %}
+  
+  server {
+
+    listen 80;
+    server_name localhost;
+
+    location / {
+        root  html;
+        index index.html;
+    }
+
+{% for upstream in nginx_upstream_list %}
+    location /{{ upstream.path }} {
+      proxy_pass  http://{{ upstream.name }};
+      proxy_set_header  X-Real-IP           $remote_addr;
+      proxy_set_header  X-Forwarded-For     $proxy_add_x_forwarded_for;
+      proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504 http_404;
+    }
+
+{% endfor %}
+
+  }
+}
