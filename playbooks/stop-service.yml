@@ -1,0 +1,4 @@
+# run command : ansible-playbook -i inventory/production|staging?.yml playbooks/test-connection.yml --extra-vars "target=what"
+- hosts: "{{ target }}"
+  roles:
+    - stop-systemd

@@ -1,0 +1,54 @@
+all:
+  vars:
+    runtime_env: 'staging'
+    email_contact: 'irwin@irwin13.com'
+
+  children:
+    golang_server:
+      children:
+        golang_web:
+          hosts:
+            golang_web_01:
+              ansible_host: 1.2.3.4
+              s3_bucket: 'my-bucket'
+              service_name: 'golang-web'
+              host_name: 'golang-web-01'
+              http_port: 80
+            golang_web_02:
+              ansible_host: 5.6.7.8
+              s3_bucket: 'my-bucket'
+              service_name: 'golang-web'
+              host_name: 'golang-web-02'
+              http_port: 80              
+    
+    nodejs_server:
+      children:
+        nodejs_web:
+          hosts:
+            nodejs_web_01:
+              ansible_host: 1.2.3.4
+              s3_bucket: 'my-bucket'
+              service_name: 'nodejs-web'
+              host_name: 'nodejs-web-01'
+              http_port: 80
+
+    redis_server:
+      children:
+        redis:
+          hosts:
+            redis_master:
+              ansible_host: 1.2.3.4
+              redis_port: 6379
+              redis_base_dir: '/opt/redis'
+
+    nginx_server:
+      children:
+        nginx_private:
+          hosts:
+            nginx_private_01:
+              ansible_host: 1.2.3.4
+
+        nginx_public:
+          hosts:
+            nginx_public_01:
+              ansible_host: 1.2.3.4

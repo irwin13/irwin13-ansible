@@ -1,5 +1,6 @@
-# run command : ansible-playbook -i inventory/nginx.yml. playbooks/install-nginx-private.yml --extra-vars "target=local"
+# run command : ansible-playbook -i inventory/production|staging? playbooks/install-nginx-private.yml --extra-vars "target=what"
 - hosts: "{{ target }}"
   roles:
-    - install-basic-software
+    - install-basic-requirement
     - install-nginx
+    - update-nginx-conf-main

@@ -1,0 +1,24 @@
+---
+- name: Download nodesource nodejs {{ major_version }} installer
+  get_url: 
+    url: https://deb.nodesource.com/setup_{{ major_version }}.x 
+    dest: /tmp/node-installer.sh
+
+- name: Update mode nodesource script
+  ansible.builtin.file:
+    path: "/tmp/node-installer.sh"
+    mode: 'a+x'
+
+- name: Execute the node-installer.sh
+  become: yes
+  command: /tmp/node-installer.sh
+
+- name: Remove the node-installer.sh
+  file: 
+    path: /tmp/node-installer.sh 
+    state: absent
+
+- name: Install nodejs {{ major_version }}
+  become: yes
+  ansible.builtin.apt:
+    name: nodejs

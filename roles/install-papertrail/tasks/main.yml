@@ -14,7 +14,7 @@
 
 - name: Download papertrail script
   become: yes
-  command: "wget -qO /opt/papertrail/papertrail-setup.sh --header=\"X-Papertrail-Token: {{ lookup('env', 'PAPERTRAIL_TOKEN') }}\" https://papertrailapp.com/destinations/123/setup.sh"
+  command: "wget -qO /opt/papertrail/papertrail-setup.sh --header=\"X-Papertrail-Token: {{ lookup('env', 'PAPERTRAIL_TOKEN') }}\" https://papertrailapp.com/destinations/22332032/setup.sh"
 
 - name: Update mode papertrail script
   become: yes

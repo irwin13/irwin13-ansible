@@ -1,0 +1,4 @@
+{
+    "target" : "nginx_public",
+    "vhost_domain_name":"localhost.com"
+}

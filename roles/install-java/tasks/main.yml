@@ -1,0 +1,33 @@
+---
+- name: Download bellsoft GPG Key
+  get_url: 
+    url: https://download.bell-sw.com/pki/GPG-KEY-bellsoft
+    dest: /tmp/bellsoft-gpg-key
+
+- name: Install gnupg
+  become: yes
+  ansible.builtin.apt:
+    name: gnupg
+
+- name: Add gpg key to apt key
+  become: yes
+  command: "apt-key add /tmp/bellsoft-gpg-key"
+
+- name: Add bellsoft entry to apt sources list
+  become: yes
+  ansible.builtin.lineinfile:
+    path: /etc/apt/sources.list.d/bellsoft.list
+    create: true
+    state: present
+    insertbefore: BOF
+    line: "deb [arch={{ arch }}] https://apt.bell-sw.com/ stable main"
+
+- name: Run apt update
+  become: yes
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Install java {{ major_version }}
+  become: yes
+  ansible.builtin.apt:
+    name: bellsoft-java{{ major_version }}

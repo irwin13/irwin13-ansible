@@ -1,0 +1,12 @@
+[Unit]
+Description={{ service_name }}
+StartLimitIntervalSec=3600
+StartLimitBurst=12
+
+[Service]
+ExecStart=/opt/{{ service_name }}/{{ service_name }}.sh
+Restart=on-failure
+RestartSec=1s
+
+[Install]
+WantedBy=multi-user.target

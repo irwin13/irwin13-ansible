@@ -1,0 +1,22 @@
+---
+- name: Add vhosts sites-available
+  become: yes
+  template:
+    src: vhosts-80.conf
+    dest: "/etc/nginx/sites-available/{{ vhost_domain_name }}"
+
+- name: Create symlink to sites-enabled
+  become: yes
+  command: "ln -sf /etc/nginx/sites-available/{{ vhost_domain_name }} /etc/nginx/sites-enabled/"
+
+- name: Validate nginx.conf
+  become: yes
+  command: "nginx -t"
+
+- name: Reload nginx service
+  become: yes
+  command: "systemctl reload nginx"
+
+- name: Restart nginx service
+  become: yes
+  command: "systemctl restart nginx"

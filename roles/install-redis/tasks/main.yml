@@ -5,31 +5,46 @@
     state: directory
     path: "/opt/redis/"
 
-- name: Download redis 3
+- name: Set vm.overcommit_memory to 1
   become: yes
-  command: "wget -qO /opt/redis/redis-3.2.9.tar.gz https://download.redis.io/releases/redis-3.2.9.tar.gz"
+  ansible.builtin.lineinfile:
+    path: /etc/sysctl.conf
+    insertafter: EOF
+    line: "vm.overcommit_memory = 1"
+
+- name: Reboot the machine after configure overcommit_memory
+  become: yes
+  ansible.builtin.reboot:
+
+- name: Disable Transparent Huge Pages
+  become: yes
+  command: "echo never > /sys/kernel/mm/transparent_hugepage/enabled"
+
+- name: Download redis
+  become: yes
+  command: "wget -qO /opt/redis/redis-4.0.9.tar.gz https://download.redis.io/releases/redis-4.0.9.tar.gz"
 
 - name: Extract tar file
   become: yes
-  command: "tar -zxvf /opt/redis/redis-3.2.9.tar.gz -C /opt/redis"
+  command: "tar -zxvf /opt/redis/redis-4.0.9.tar.gz -C /opt/redis"
 
 - name: Run make distclean
   become: yes
   make:
-    chdir: /opt/redis/redis-3.2.9
+    chdir: /opt/redis/redis-4.0.9
     target: distclean
 
 - name: Run make
   become: yes
   make:
     target: install
-    chdir: /opt/redis/redis-3.2.9
+    chdir: /opt/redis/redis-4.0.9
 
 - name: Update redis.conf
   become: yes
   template:
     src: redis.conf
-    dest: "/opt/redis/redis-3.2.9/redis-3.conf"
+    dest: "/opt/redis/redis-4.0.9/redis.conf"
 
 - name: Create redis service file
   become: yes

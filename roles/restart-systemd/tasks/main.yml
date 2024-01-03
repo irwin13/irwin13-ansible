@@ -1,0 +1,17 @@
+---
+- name: Update service file
+  become: yes
+  template:
+    src: generic.service
+    dest: "/etc/systemd/system/{{ service_name }}.service"
+
+- name: Reload systemd to reread configs
+  become: yes
+  ansible.builtin.systemd:
+    daemon_reload: true    
+
+- name: Restart service
+  become: yes
+  ansible.builtin.systemd:
+    state: restarted
+    name: "{{ service_name }}"

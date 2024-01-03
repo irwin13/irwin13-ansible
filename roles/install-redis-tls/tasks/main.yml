@@ -5,6 +5,21 @@
     state: directory
     path: "/opt/redis/"
 
+- name: Set vm.overcommit_memory to 1
+  become: yes
+  ansible.builtin.lineinfile:
+    path: /etc/sysctl.conf
+    insertafter: EOF
+    line: "vm.overcommit_memory = 1"
+
+- name: Disable Transparent Huge Pages
+  become: yes
+  command: "echo never > /sys/kernel/mm/transparent_hugepage/enabled"
+
+- name: Reboot the machine after configure overcommit_memory and Transparent Huge Pages
+  become: yes
+  ansible.builtin.reboot:
+
 - name: Download redis 6
   become: yes
   command: "wget -qO /opt/redis/redis-6.2.11.tar.gz https://download.redis.io/releases/redis-6.2.11.tar.gz"

@@ -1,5 +1,5 @@
-# run command : ansible-playbook -i inventory/redis.yml playbooks/install-redis-tls.yml --extra-vars "target=local"
+# run command : ansible-playbook -i inventory/production|staging?.yml playbooks/install-redis-tls.yml --extra-vars "target=what"
 - hosts: "{{ target }}"
   roles:
-    - install-basic-sotware
+    - install-basic-requirement
     - install-redis-tls

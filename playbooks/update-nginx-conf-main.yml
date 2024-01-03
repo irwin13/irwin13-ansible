@@ -1,0 +1,5 @@
+# run command : ansible-playbook -i inventory/production|staging?.yml playbooks/update-nginx-upstream.yml --extra-vars "@file.json"
+- hosts: "{{ target }}"
+  roles:
+    - update-nginx-conf-main
+    

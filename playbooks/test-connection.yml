@@ -1,4 +1,4 @@
-# run command : ansible-playbook -i inventory/*.yml playbooks/test-connection.yml --extra-vars "target=what"
+# run command : ansible-playbook -i inventory/production|staging?.yml playbooks/test-connection.yml --extra-vars "target=what"
 - hosts: "{{ target }}"
   roles:
-    - test-connection
+    - check-connection

@@ -1,0 +1,15 @@
+{
+    "target" : "nginx_public",    
+    "stream_list" : [
+        {
+            "listen_port":8080,
+            "upstream_name":"service",
+            "upstream_list":[
+                {
+                    "ip":"1.2.3.4",
+                    "port": 8080
+                }
+            ]
+        }        
+    ]
+}

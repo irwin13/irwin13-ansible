@@ -1,0 +1,4 @@
+# run command : ansible-playbook -i inventory/production|staging? playbooks/add-nginx-vhost-443.yml --extra-vars "@staging-subdomain-vhost.json"
+- hosts: "{{ target }}"
+  roles:
+    - add-nginx-root-vhost-443

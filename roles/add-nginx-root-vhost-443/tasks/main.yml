@@ -1,0 +1,46 @@
+---
+- name: Install certbot
+  become: yes
+  ansible.builtin.apt:
+    name: certbot
+
+- name: Install python3-certbot-nginx
+  become: yes
+  ansible.builtin.apt:
+    name: python3-certbot-nginx
+
+- name: Add vhosts sites-available
+  become: yes
+  template:
+    src: vhosts-80.conf
+    dest: "/etc/nginx/sites-available/{{ vhost_domain_name }}"
+
+- name: Create symlink to sites-enabled
+  become: yes
+  command: "ln -sf /etc/nginx/sites-available/{{ vhost_domain_name }} /etc/nginx/sites-enabled/"
+
+- name: Validate nginx.conf
+  become: yes
+  command: "nginx -t"
+
+- name: Restart nginx service
+  become: yes
+  command: "systemctl restart nginx"
+
+- name: Obtaining SSL certificate
+  become: yes
+  command: "certbot --nginx -d {{ vhost_domain_name }} --non-interactive --agree-tos -m {{ email_contact }}"
+
+- name: Add vhosts sites-available
+  become: yes
+  template:
+    src: vhosts-443.conf
+    dest: "/etc/nginx/sites-available/{{ vhost_domain_name }}"
+
+- name: Validate nginx.conf
+  become: yes
+  command: "nginx -t"
+
+- name: Reload nginx service
+  become: yes
+  command: "systemctl reload nginx"

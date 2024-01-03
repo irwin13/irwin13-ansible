@@ -1,0 +1,14 @@
+---
+- name: Install redis
+  become: yes
+  ansible.builtin.apt:
+    name: redis
+
+- name: Download deb installer
+  get_url: 
+    url: https://github.com/contribsys/faktory/releases/download/v1.7.0/faktory_1.7.0-1_amd64.deb
+    dest: /tmp/faktory.deb
+
+- name: Install faktory
+  become: yes
+  command: dpkg -i /tmp/faktory.deb

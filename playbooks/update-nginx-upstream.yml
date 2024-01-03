@@ -1,5 +1,0 @@
-# run command : ansible-playbook -i inventory/nginx.yml playbooks/update-nginx-upstream.yml --extra-vars "target=local"
-- hosts: "{{ target }}"
-  roles:
-    - update-nginx-upstream
-    

@@ -1,0 +1,11 @@
+- name: Update logrotate rsyslog file
+  become: yes
+  template:
+    src: rsyslog
+    dest: "/etc/logrotate.d/rsyslog"
+
+- name: Restart service logrotate
+  become: yes
+  ansible.builtin.systemd:
+    state: restarted
+    name: "logrotate"

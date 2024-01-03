@@ -1,0 +1,5 @@
+# run command : ansible-playbook -i inventory/production|staging? playbooks/deploy-go-service.yml --extra-vars "target=what build_number=1"
+- hosts: "{{ target }}"
+  roles:
+    - deploy-nodejs-service
+  serial: 1

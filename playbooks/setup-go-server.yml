@@ -1,0 +1,8 @@
+# run command : ansible-playbook -i inventory/production|staging?.yml playbooks/setup-go-server.yml --extra-vars "target=what"
+- hosts: "{{ target }}"
+  roles:
+    - install-basic-requirement
+    - setup-systemd
+    - update-logrotate
+    - install-papertrail
+    

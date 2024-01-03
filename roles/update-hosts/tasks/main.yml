@@ -1,0 +1,9 @@
+---
+- name: Update /etc/hosts for api-internal
+  become: yes
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    insertafter: EOF
+    line: "{{ item.line }}"
+  loop:
+     - { line: '1.2.3.4 api.internal' }

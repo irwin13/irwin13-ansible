@@ -1,0 +1,9 @@
+# run command : ansible-playbook -i inventory/production|staging?.yml playbooks/setup-go-server.yml --extra-vars "target=what arch=amd64|arm64 major_version=8|11|17|etc"
+- hosts: "{{ target }}"
+  roles:
+    - install-basic-requirement
+    - setup-systemd
+    - update-logrotate
+    - install-papertrail
+    - install-java
+    

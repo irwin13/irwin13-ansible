@@ -1,0 +1,7 @@
+{
+    "target" : "nginx_public",
+    "vhost_domain_name":"api.localhost.com",
+    "vhost_upstream_name": "api", 
+    "vhost_upstream_ip": "127.0.0.1",
+    "vhost_upstream_port" : 80
+}
